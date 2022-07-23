@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(event){
-  var table = document.getElementById("gameBoard");
-  for (var i = 0, row; i <= 2;  ++i) {
+  let table = document.getElementById("gameBoard");
+  for (let i = 0, row; i <= 2;  ++i) {
     row = table.rows[i];
-    for (var j = 0, cell; j <= 2; ++j) {
+    for (let j = 0, cell; j <= 2; ++j) {
       cell = row.cells[j];
       fillInCells(cell);
       checkTheWinner(cell);
-      changePlayer(cell);
     }
   }
   document.getElementById("startAgain").style.visibility = "hidden";
@@ -17,42 +16,36 @@ let freeCells = 9;
 
 function fillInCells(cell) {
   cell.addEventListener("click", function() {
-    if(cell.innerHTML == "" && freeCells != -1){
+    if (cell.innerHTML == "" && freeCells != -1) {
       cell.innerHTML = nextPlayer;
       --freeCells;
+      changePlayer();
     }     
   });       
 }
 
-function changePlayer(cell) {
-  cell.addEventListener("click", function() {
-    if(nextPlayer == "X"){
-      nextPlayer = "O";
-    } else {
-      nextPlayer = "X";
-    }
-  });
+function changePlayer() {
+  if (nextPlayer == "X"){
+    nextPlayer = "O";
+  } else {
+    nextPlayer = "X";
+  }
 }
  
 function checkTheWinner(cell) {
-  cell.addEventListener("click", function() {
-    let cell1 = document.getElementById("cellNo0").innerHTML;
-    let cell2 = document.getElementById("cellNo1").innerHTML;
-    let cell3 = document.getElementById("cellNo2").innerHTML;
-    let cell4 = document.getElementById("cellNo3").innerHTML;
-    let cell5 = document.getElementById("cellNo4").innerHTML;
-    let cell6 = document.getElementById("cellNo5").innerHTML;
-    let cell7 = document.getElementById("cellNo6").innerHTML;
-    let cell8 = document.getElementById("cellNo7").innerHTML;
-    let cell9 = document.getElementById("cellNo8").innerHTML;
-   
-    if ((((cell1 == cell2) && (cell2 == cell3)) || ((cell1 == cell4) && (cell4 == cell7))) && (cell1 != "")) {
-      print("The winner is the player played with: " + cell1);
-    } else if ((((cell3 == cell6) && (cell6 == cell9)) || ((cell7 == cell8) && (cell8 == cell9))) && (cell9 != "")) {
-      print("The winner is the player played with: " + cell9);
-    } else if ((((cell1 == cell5) && (cell5 == cell9)) || ((cell3 == cell5) && (cell5 == cell7)) || ((cell4 == cell5) && 
-      (cell5 == cell6)) || ((cell2 == cell5) && (cell5 == cell8))) && (cell5 != "")) {
-      print("The winner is the player played with: " + cell5);
+  cell.addEventListener("click", function() { 
+    let cells = document.querySelectorAll("td");
+    let cellStr = ["", "", "", "", "", "", "", "", ""];
+    for(let i = 0; i < 9; ++i){
+      cellStr[i] = cells[i].innerHTML;
+    }
+    if ((((cellStr[0] == cellStr[1]) && (cellStr[1] == cellStr[2])) || ((cellStr[0] == cellStr[3]) && (cellStr[3] == cellStr[6]))) && (cellStr[0] != "")) {
+      print("The winner is the player played with: " + cellStr[0]);
+    } else if ((((cellStr[2] == cellStr[5]) && (cellStr[5] == cellStr[8])) || ((cellStr[6] == cellStr[7]) && (cellStr[7] == cellStr[8]))) && (cellStr[8] != "")) {
+      print("The winner is the player played with: " + cellStr[8]);
+    } else if ((((cellStr[0] == cellStr[4]) && (cellStr[4] == cellStr[8])) || ((cellStr[2] == cellStr[4]) && (cellStr[4] == cellStr[6])) || 
+      ((cellStr[3] == cellStr[4]) && (cellStr[4] == cellStr[5])) || ((cellStr[1] == cellStr[4]) && (cellStr[4] == cellStr[7]))) && (cellStr[4] != "")) {
+      print("The winner is the player played with: " + cellStr[4]);
     } else if (freeCells == 0) {
       print("It is a draw!");
     }
